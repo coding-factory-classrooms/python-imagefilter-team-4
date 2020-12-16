@@ -1,15 +1,14 @@
 import cv2
 
-def convertimage():
-    image = cv2.imread('../image /humour.jpg')
 
+def convertImage():
+    image = cv2.imread('image/humour.jpg')
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    cv2.imshow('Original image', image)
-    cv2.imshow('Gray image', gray)
-
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    cv2.imshow('image/humour.jpg', image)
+    cv2.imshow('Gray humour', gray)
 
 
-
+def saveImage(gray):
+    convertImage()
+    cv2.imwrite('outputImage/GrayHumour.jpg', gray)
