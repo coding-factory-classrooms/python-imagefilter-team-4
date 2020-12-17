@@ -1,6 +1,6 @@
 import os # Sert a parcourir les fichiers d'un dossier
 import cv2
-from filters import blackandwhite, blur
+from filters import blackandwhite, blur, dilatation
 
 # Check les fichiers dans le dossier
 input_dir = 'image'
@@ -19,7 +19,7 @@ for f in files:
     # Application filtre flou
     image = blur.blur_image(image)
     # Application filtre dilatation
-
+    image = dilatation.dilate_image(image)
 
     # Enregistrement des fichiers dans un autre dossier
     cv2.imwrite(f"outputImage/{f}", image)
