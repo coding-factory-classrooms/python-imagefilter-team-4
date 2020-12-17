@@ -2,6 +2,7 @@ import imghdr
 import sys
 import os  # Sert a parcourir les fichiers d'un dossier
 import cv2
+import logger
 from filters import blackandwhite, blur, dilatation
 
 args = sys.argv
@@ -35,7 +36,7 @@ try:
 
         # Si le format d'image est incorrect, affiche une erreur
         if image_type not in ('jpg', 'jpeg', 'png'):
-            print(f"Error: ({file_path}) -> the file extension must be jpeg or png")
+            logger.log(f"Error: ({file_path}) -> the file extension must be jpeg or png")
         # Sinon, éxécute le code normalement
         else:
             # Execute le programme avec paramètres si il détecte au moins un paramètre de lancement
@@ -45,12 +46,15 @@ try:
                     # Application filtre N&B
                     if args[i] == "--blackandwhite":
                         image = blackandwhite.bandw_image(image)
+                        logger.log("le filtre noir et blanc a été appliqué")
                     # Application filtre flou
                     elif args[i] == "--blur":
                         image = blur.blur_image(image)
+                        logger.log("le filtre flou a été appliqué")
                     # Application filtre dilatation
                     elif args[i] == "--dilatation":
                         image = dilatation.dilate_image(image)
+                        logger.log("le filtre de dilatation a été appliqué")
 
                 # Enregistrement des fichiers dans un autre dossier
                 cv2.imwrite(f"{output_dir}/{f}", image)
@@ -73,12 +77,12 @@ try:
 
 # Si le chemin du dossier est incorrect, affiche une erreur
 except FileNotFoundError as e:
-    print(f"Error: input_dir = '{input_dir}' -> the folder path is incorrect or the folder doesn't exist")
+    logger.log(f"Error: input_dir = '{input_dir}' -> the folder path is incorrect or the folder doesn't exist")
 # Si le chemin du dossier n'est pas un dossier, affiche une erreur
 except NotADirectoryError as e:
-    print(f"Error: input_dir = '{input_dir}' -> path selected is not a folder")
+    logger.log(f"Error: input_dir = '{input_dir}' -> path selected is not a folder")
 # Si les paramètres de blur sont incorrects, affiche une erreur
 except cv2.error as e:
-    print(f"Error: blur_image() -> the blur parameters must be odd numbers and greater than 0")
+    logger.log(f"Error: blur_image() -> the blur parameters must be odd numbers and greater than 0")
 except IndexError as e:
-    print("Error: you must specify a correct folder path with launch parameters -i and -o (-i input_path or -o output_path)")
+    logger.log(f"Error: you must specify a correct folder path with launch parameters -i and -o (-i input_path or -o output_path)")
