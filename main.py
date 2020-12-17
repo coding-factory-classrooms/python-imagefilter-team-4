@@ -1,10 +1,14 @@
 import imghdr
+import sys
 import os  # Sert a parcourir les fichiers d'un dossier
 import cv2
 from filters import blackandwhite, blur, dilatation
 
 # Chemin du dossier ou l'on veut appliquer les filtres
 input_dir = 'image'
+
+args = sys.argv
+print(args)
 # Si le chemin du dossier est correct, éxécute le code normalement
 try:
     files = os.listdir(input_dir)
@@ -17,15 +21,29 @@ try:
         file_path = f"{input_dir}/{f}"
         # Récupère le format de l'image
         image_type = imghdr.what(file_path)
-
+        image = cv2.imread(file_path)
 
         # Si le format d'image est incorrect, affiche une erreur
         if image_type not in ('jpg', 'jpeg', 'png'):
             print(f"Error: ({file_path}) -> the file extension must be jpeg or png")
         # Sinon, éxécute le code normalement
         else:
-            image = cv2.imread(file_path)
+            # Choix du filtre en utilisant les parametres
+            for args in sys.argv:
+                if args == "--blackandwhite":
+                    image = blackandwhite.bandw_image(image)
+                    cv2.imshow("Gray", image)
+                    cv2.waitKey(0)
+                elif args == "--blur":
+                    image = blur.blur_image(image)
+                    cv2.imshow("Blur", image)
+                    cv2.waitKey(0)
+                elif args == "--dilatation":
+                    image = dilatation.dilate_image(image)
+                    cv2.imshow("Dilatation", image)
+                    cv2.waitKey(0)
 
+            # Apllication des filtres après run
             # Application filtre N&B
             image = blackandwhite.bandw_image(image)
             # Application filtre flou
