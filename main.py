@@ -4,20 +4,30 @@ import os  # Sert a parcourir les fichiers d'un dossier
 import cv2
 from filters import blackandwhite, blur, dilatation
 
-# Chemin du dossier ou l'on veut appliquer les filtres
-input_dir = 'image'
-
 args = sys.argv
 print(args)
+
+# Chemin du dossier ou l'on veut appliquer les filtres
+input_dir = 'image'
+output_dir = 'outputImage'
+
 # Si le chemin du dossier est correct, éxécute le code normalement
 try:
+    # Modifie le chemin d'input des images si le paramètre de lancement -i est présent avec un autre chemin
+    for i in range(len(args)):
+        if args[i] == "-i":
+            input_dir = args[i + 1]
+        # Modifie le chemin d'output des images si le paramètre de lancement -o est présent avec un autre chemin
+        elif args[i] == "-o":
+            output_dir = args[i + 1]
+
     files = os.listdir(input_dir)
     print(files)
 
     # Parcourt les fichiers du dossier
     for f in files:
 
-        # Recupere les images
+        # Récupère les images
         file_path = f"{input_dir}/{f}"
         # Récupère le format de l'image
         image_type = imghdr.what(file_path)
@@ -28,31 +38,38 @@ try:
             print(f"Error: ({file_path}) -> the file extension must be jpeg or png")
         # Sinon, éxécute le code normalement
         else:
-            # Choix du filtre en utilisant les parametres
-            for args in sys.argv:
-                if args == "--blackandwhite":
-                    image = blackandwhite.bandw_image(image)
-                    cv2.imshow("Gray", image)
-                    cv2.waitKey(0)
-                elif args == "--blur":
-                    image = blur.blur_image(image)
-                    cv2.imshow("Blur", image)
-                    cv2.waitKey(0)
-                elif args == "--dilatation":
-                    image = dilatation.dilate_image(image)
-                    cv2.imshow("Dilatation", image)
-                    cv2.waitKey(0)
+            # Execute le programme avec paramètres si il détecte au moins un paramètre de lancement
+            if len(args) > 1:
+                # Choix du filtre en utilisant les parametres
+                for i in range(len(args)):
+                    # Application filtre N&B
+                    if args[i] == "--blackandwhite":
+                        image = blackandwhite.bandw_image(image)
+                    # Application filtre flou
+                    elif args[i] == "--blur":
+                        image = blur.blur_image(image)
+                    # Application filtre dilatation
+                    elif args[i] == "--dilatation":
+                        image = dilatation.dilate_image(image)
 
-            # Apllication des filtres après run
-            # Application filtre N&B
-            image = blackandwhite.bandw_image(image)
-            # Application filtre flou
-            image = blur.blur_image(image)
-            # Application filtre dilatation
-            image = dilatation.dilate_image(image)
+                # Enregistrement des fichiers dans un autre dossier
+                cv2.imwrite(f"{output_dir}/{f}", image)
+                # Affiche le résultat dans une autre fenêtre et attend un input clavier de l'utilisateur
+                cv2.imshow("Output", image)
+                cv2.waitKey(0)
 
-            # Enregistrement des fichiers dans un autre dossier
-            cv2.imwrite(f"outputImage/{f}", image)
+            # Execute le programme normalement si il n'y a pas de paramètres de lancement
+            else:
+                # Apllication des filtres après runs
+                # Application filtre N&B
+                image = blackandwhite.bandw_image(image)
+                # Application filtre flou
+                image = blur.blur_image(image)
+                # Application filtre dilatation
+                image = dilatation.dilate_image(image)
+
+                # Enregistrement des fichiers dans un autre dossier
+                cv2.imwrite(f"{output_dir}/{f}", image)
 
 # Si le chemin du dossier est incorrect, affiche une erreur
 except FileNotFoundError as e:
@@ -63,3 +80,5 @@ except NotADirectoryError as e:
 # Si les paramètres de blur sont incorrects, affiche une erreur
 except cv2.error as e:
     print(f"Error: blur_image() -> the blur parameters must be odd numbers and greater than 0")
+except IndexError as e:
+    print("Error: you must specify a correct folder path with launch parameters -i and -o (-i input_path or -o output_path)")
