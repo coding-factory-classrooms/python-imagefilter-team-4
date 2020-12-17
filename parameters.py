@@ -1,7 +1,7 @@
 import sys
 import cv2
 import os
-from filters import blackandwhite, blur
+from filters import blackandwhite, blur, dilatation
 
 input_dir = 'image'
 files = os.listdir(input_dir)
@@ -21,4 +21,8 @@ for f in files:
         elif args == "--blur":
             image = blur.blur_image(image)
             cv2.imshow("Blur", image)
+            cv2.waitKey(0)
+        elif args == "--dilatation":
+            image = dilatation.dilate_image(image)
+            cv2.imshow("Dilatation", image)
             cv2.waitKey(0)

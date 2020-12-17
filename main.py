@@ -17,6 +17,8 @@ try:
         file_path = f"{input_dir}/{f}"
         # Récupère le format de l'image
         image_type = imghdr.what(file_path)
+
+
         # Si le format d'image est incorrect, affiche une erreur
         if image_type not in ('jpg', 'jpeg', 'png'):
             print(f"Error: ({file_path}) -> the file extension must be jpeg or png")
@@ -30,6 +32,7 @@ try:
             image = blur.blur_image(image)
             # Application filtre dilatation
             image = dilatation.dilate_image(image)
+
             # Enregistrement des fichiers dans un autre dossier
             cv2.imwrite(f"outputImage/{f}", image)
 
