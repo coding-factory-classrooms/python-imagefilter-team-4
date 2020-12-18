@@ -51,11 +51,11 @@ def default_args(args):
     Looks for arguments in main and uses it for different actions like change input/output file
     :param args: the arguments list put in the main
     """
-    # Modifie le chemin d'input des images si le paramètre de lancement -i est présent avec un autre chemin
+    # Changes the image input path if the -i launch parameter is present with another path
     for i in range(len(args)):
         if args[i] == "-i":
             lib['input_dir'] = args[i + 1]
-        # Modifie le chemin d'output des images si le paramètre de lancement -o est présent avec un autre chemin
+        # Changes the output path of the images if the launch parameter -o is present with another path
         elif args[i] == "-o":
             lib['output_dir'] = args[i + 1]
         elif args[i] == "-h":
@@ -71,52 +71,52 @@ def filters_args(args):
     :param args: the arguments list put in the main
     """
     from main import output_dir, image, f
-    # Analyse chaque paramètre de lancement
+    # Analyze each launch parameter
     if "--filters" in args:
         for i in range(len(args)):
 
-            # Si un paramètre filtre est présent, rentre dans la boucle
+            # If a filter parameter is present, enter the loop
             if args[i] == "--filters":
-                # Attribue la valeur après le paramètre dans une variabke
+                # Assigns the value after the parameter in a variable
                 filter_arg = args[i + 1]
-                # Sépare la valeur en plusieurs objets selon le caractère du splitter
+                # Separates the value into multiple objects according to the character of the splitter
                 arg_split = filter_arg.split('|')
 
-                # Analyse chaque objet du splitter
+                # Analyzes each splitter object
                 for k in arg_split:
-                    # Sépare le type de filtre et la valeur du filtre de chaque objet
+                    # Separates the filter type and filter value of each object
                     filter_split = k.split(':')
 
-                    # Attribue le type et la valeur du filtre a deux variables
+                    # Assigns the filter type and value to two variables
                     filter_type = filter_split[0]
 
-                    # Application filtre N&B
+                    # Black and white filter application
                     # --filters --blackandwhite = --filters black --filters blackandwhite|blur
                     if filter_type == "grayscale":
                         image = lib['bandw'](image)
-                        logger.log("le filtre noir et blanc a été appliqué")
-                    # Application filtre flou
+                        logger.log("The black and white filter has been applied")
+                    # Blur filter application
                     elif filter_type == "blur":
                         lib['blur_value'] = int(filter_split[1])
                         image = lib['blur'](image)
-                        logger.log("le filtre flou a été appliqué")
-                    # Application filtre dilatation
+                        logger.log("The blur filter has been applied")
+                    # Dilatation filter application
                     elif filter_type == "dilate":
                         lib['dilate_value'] = int(filter_split[1])
                         image = lib['dilate'](image)
-                        logger.log("le filtre de dilatation a été appliqué")
+                        logger.log("The dilatation filter has been applied")
 
     else:
-        # Apllication des filtres après runs
-        # Application filtre N&B
+        # Applying filters after runs
+        # Black and white filter application
         image = lib['bandw'](image)
-        # Application filtre flou
+        # Blur filter application
         image = lib['blur'](image)
-        # Application filtre dilatation
+        # Dilatation filter application
         image = lib['dilate'](image)
 
-    # Enregistrement des fichiers dans un autre dossier
+    # Saving files to another folder
     cv2.imwrite(f"{output_dir}/{f}", image)
-    # Affiche le résultat dans une autre fenêtre et attend un input clavier de l'utilisateur
+    # Displays the result in another window and waits for a keyboard input from the user
     cv2.imshow("Output", image)
     cv2.waitKey(0)

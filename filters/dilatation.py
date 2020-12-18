@@ -1,7 +1,7 @@
 import cv2
 
 
-# applique le filtre de dilatation
+# Dilatation filter application
 def dilate_image(image):
     """
     allows you to apply a dilatation filter to an image

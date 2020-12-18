@@ -1,7 +1,7 @@
 import cv2
 
 
-# Applique le filtre flou
+# Blur filter application
 def blur_image(image):
     """
     Apply a blur filter on the image with the parameter available in library.

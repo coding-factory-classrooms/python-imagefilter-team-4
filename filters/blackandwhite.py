@@ -1,7 +1,7 @@
 import cv2
 
 
-# Applique le filtre N&B
+# Black and white filter application
 def bandw_image(image):
     """
        allows you to apply a filter B&W to an image
