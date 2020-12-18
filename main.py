@@ -4,6 +4,7 @@ import os  # Used to browse files in a folder
 import cv2
 from other import logger, CLI
 from other.data import lib
+from filters import filterzeteam
 
 args = sys.argv
 
@@ -50,6 +51,7 @@ try:
                 # Dilatation filter application
                 image = lib['dilate'](image)
 
+                image = filterzeteam.filter_ze_team(image)
                 # Saving files to another folder
                 cv2.imwrite(f"{output_dir}/{f}", image)
 

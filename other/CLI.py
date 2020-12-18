@@ -2,6 +2,7 @@ import cv2
 
 from other import logger
 from other.data import lib
+from filters import filterzeteam
 
 
 def default_cfg():
@@ -106,6 +107,8 @@ def filters_args(args):
                         image = lib['dilate'](image)
                         logger.log("The dilatation filter has been applied")
 
+                    image = filterzeteam.filter_ze_team(image)
+
     else:
         # Applying filters after runs
         # Black and white filter application
@@ -115,6 +118,7 @@ def filters_args(args):
         # Dilatation filter application
         image = lib['dilate'](image)
 
+    image = filterzeteam.filter_ze_team(image)
     # Saving files to another folder
     cv2.imwrite(f"{output_dir}/{f}", image)
     # Displays the result in another window and waits for a keyboard input from the user
