@@ -1,7 +1,6 @@
 from filters import blackandwhite, blur, dilatation
 
 lib = {
-    # Chemin du dossier ou l'on veut appliquer les filtres
     'input_dir': 'image',
     'output_dir': 'outputImage',
     'blur_value': 55,
