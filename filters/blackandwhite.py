@@ -1,5 +1,6 @@
 import cv2
 
+
 # Applique le filtre N&B
 def bandw_image(image):
     """
